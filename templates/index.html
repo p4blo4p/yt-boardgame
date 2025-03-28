@@ -1,0 +1,37 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Videos de Juegos de Mesa</title>
+</head>
+<body>
+    <h1>Canales en Inglés</h1>
+    {% for canal, videos in canales_ingles.items() %}
+        <h2>{{ canal }}</h2>
+        <ul>
+            {% for video in videos %}
+                <li>
+                    <a href="{{ video.url }}" target="_blank">
+                        <img src="{{ video.thumbnail }}" alt="{{ video.title }}" width="200">
+                        {{ video.title }}
+                    </a>
+                </li>
+            {% endfor %}
+        </ul>
+    {% endfor %}
+
+    <h1>Canales en Español</h1>
+    {% for canal, videos in canales_espanol.items() %}
+        <h2>{{ canal }}</h2>
+        <ul>
+            {% for video in videos %}
+                <li>
+                    <a href="{{ video.url }}" target="_blank">
+                        <img src="{{ video.thumbnail }}" alt="{{ video.title }}" width="200">
+                        {{ video.title }}
+                    </a>
+                </li>
+            {% endfor %}
+        </ul>
+    {% endfor %}
+</body>
+</html>
