@@ -1,5 +1,6 @@
 import yt_dlp
 import json
+import time
 
 canales_ingles = {
     "The Dice Tower": "https://www.youtube.com/@TheDiceTower",
@@ -54,6 +55,7 @@ def obtener_info_todos_canales(canales, num_videos=10):
     for nombre_canal, url_canal in canales.items():
         print(f"Extrayendo información de {nombre_canal}...")
         data[nombre_canal] = extraer_info_canal(url_canal, num_videos)
+        time.sleep(2)  # Pausa de 2 segundos entre cada extracción para evitar ser bloqueado por la API de YouTube
     return data
 
 if __name__ == '__main__':
