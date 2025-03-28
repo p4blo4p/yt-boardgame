@@ -1,6 +1,11 @@
 import yt_dlp
 import json
 import time
+from datetime import datetime, timedelta
+
+# Configuración
+OUTPUT_FILE = 'videos_juegos_mesa.json'
+EXTRACTION_INTERVAL = 24 * 3600  # Extracción diaria (en segundos)
 
 canales_ingles = {
     "The Dice Tower": "https://www.youtube.com/@TheDiceTower",
@@ -24,12 +29,11 @@ canales_espanol = {
     "La Guarida del Goblin": "https://www.youtube.com/@LaGuaridadelGoblin"
 }
 
-def extraer_info_canal(canal_url, num_videos=10):  # Limitar a los 10 videos más recientes por defecto
+def extraer_info_canal(canal_url, ultimo_id=None):
     ydl_opts = {
-        'extract_flat': True,  # No extrae información detallada de cada video.
-        'quiet': True,  # Reduce la salida en la consola.
-        'force_generic_extractor': True, #Usa el extractor generico
-        'playlistend': num_videos  # Limita el número de videos a extraer.
+        'extract_flat': True,
+        'quiet': True,
+        'force_generic_extractor': True,
     }
 
     with yt_dlp.YoutubeDL(ydl_opts) as ydl:
@@ -37,12 +41,14 @@ def extraer_info_canal(canal_url, num_videos=10):  # Limitar a los 10 videos má
             info_dict = ydl.extract_info(canal_url, download=False)
             videos = []
             for entry in info_dict['entries']:
+                if ultimo_id and entry.get('id') == ultimo_id:
+                    break
                 video_info = {
                     'title': entry.get('title'),
-                    'url':  f"https://www.youtube.com/watch?v={entry.get('id')}", #Construye el enlace del video
-                    'thumbnail': entry.get('thumbnail'),  # URL de la miniatura
-                    'channel_name': info_dict.get('channel'), #Nombre del canal
-                    'channel_url': canal_url  #URL del canal
+                    'url': f"https://www.youtube.com/watch?v={entry.get('id')}",
+                    'thumbnail': entry.get('thumbnail'),
+                    'channel_name': info_dict.get('channel'),
+                    'channel_url': canal_url
                 }
                 videos.append(video_info)
             return videos
@@ -50,20 +56,35 @@ def extraer_info_canal(canal_url, num_videos=10):  # Limitar a los 10 videos má
             print(f"Error al extraer información de {canal_url}: {e}")
             return []
 
-def obtener_info_todos_canales(canales, num_videos=10):
+def guardar_videos(data):
+    with open(OUTPUT_FILE, 'w', encoding='utf-8') as f:
+        json.dump(data, f, indent=4, ensure_ascii=False)
+
+def cargar_videos():
+    if os.path.exists(OUTPUT_FILE):
+        with open(OUTPUT_FILE, 'r', encoding='utf-8') as f:
+            return json.load(f)
+    return {'ingles': {}, 'espanol': {}}
+
+def obtener_info_todos_canales(canales, data_anterior):
     data = {}
     for nombre_canal, url_canal in canales.items():
         print(f"Extrayendo información de {nombre_canal}...")
-        data[nombre_canal] = extraer_info_canal(url_canal, num_videos)
-        time.sleep(2)  # Pausa de 2 segundos entre cada extracción para evitar ser bloqueado por la API de YouTube
+        ultimo_id = data_anterior.get(nombre_canal, [{}])[-1].get('id') if data_anterior.get(nombre_canal) else None
+        nuevos_videos = extraer_info_canal(url_canal, ultimo_id)
+        data[nombre_canal] = nuevos_videos + data_anterior.get(nombre_canal, [])
+        time.sleep(2)
     return data
 
+def main():
+    while True:
+        data_anterior = cargar_videos()
+        info_ingles = obtener_info_todos_canales(canales_ingles, data_anterior.get('ingles', {}))
+        info_espanol = obtener_info_todos_canales(canales_espanol, data_anterior.get('espanol', {}))
+        data = {'ingles': info_ingles, 'espanol': info_espanol}
+        guardar_videos(data)
+        print("Información extraída y guardada en videos_juegos_mesa.json")
+        time.sleep(EXTRACTION_INTERVAL)
+
 if __name__ == '__main__':
-    info_ingles = obtener_info_todos_canales(canales_ingles)
-    info_espanol = obtener_info_todos_canales(canales_espanol)
-
-    # Guarda la información en un archivo JSON (opcional).
-    with open('videos_juegos_mesa.json', 'w', encoding='utf-8') as f:
-        json.dump({'ingles': info_ingles, 'espanol': info_espanol}, f, indent=4, ensure_ascii=False)
-
-    print("Información extraída y guardada en videos_juegos_mesa.json")
+    main()
