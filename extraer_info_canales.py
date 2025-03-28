@@ -2,6 +2,7 @@ import yt_dlp
 import json
 import time
 from datetime import datetime, timedelta
+import os
 
 # Configuración
 OUTPUT_FILE = 'videos_juegos_mesa.json'
