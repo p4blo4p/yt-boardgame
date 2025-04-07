@@ -29,3 +29,39 @@
 | **La Guarida del Goblin**        | Reseñas, tutoriales y partidas comentadas de juegos de mesa, con un enfoque en juegos de rol.         | Reseñas, tutoriales, juegos de rol, miniaturas.                               | Variado, temático, enfocado en el mundo goblin.    | [La Guarida del Goblin](https://www.youtube.com/@LaGuaridadelGoblin)           |
 
 **Nota:** Verifiqué los enlaces al momento de crear esta lista. Si alguno no funciona, por favor házmelo saber. ¡Espero que disfrutes explorando estos canales!
+
+
+# AI
+¡Perfecto! Aquí tienes la lista de canales de YouTube sobre Inteligencia Artificial en formato de tabla, separando los de habla inglesa y los de habla castellana:
+
+**Canales de YouTube sobre IA (Inglés)**
+
+| Idioma  | Canal                      | Enfoque Principal                                  | Audiencia Objetivo                            | Descripción/Destacado                                                  |
+| :------ | :------------------------- | :------------------------------------------------- | :-------------------------------------------- | :--------------------------------------------------------------------- |
+| Inglés  | **Lex Fridman Podcast**    | Entrevistas profundas (IA, Ciencia, Filosofía)     | General, Investigadores, Pensadores           | Conversaciones largas con líderes mundiales en IA y otros campos.      |
+| Inglés  | **Two Minute Papers**      | Resúmenes visuales de investigación (IA, Gráficos) | Técnicos, Curiosos                              | Explicaciones claras y rápidas de papers complejos.                     |
+| Inglés  | **Matt Wolfe**             | Noticias IA, Tutoriales prácticos (Herramientas)   | Usuarios generales, Negocios                  | Enfocado en cómo usar herramientas de IA (ChatGPT, Midjourney, etc.). |
+| Inglés  | **AI Explained**           | Explicación de noticias y lanzamientos de IA       | General, Entusiastas                          | Desglosa novedades de IA de forma accesible.                           |
+| Inglés  | **Yannic Kilcher**         | Análisis técnico profundo de papers de IA/ML       | Investigadores, Desarrolladores               | Entra en los detalles técnicos de la investigación en IA.              |
+| Inglés  | **AssemblyAI**           | Contenido educativo (NLP, Speech AI), Tutoriales   | Desarrolladores, Técnicos                     | Contenido de calidad de una empresa de API de IA.                      |
+| Inglés  | **Robert Scoble**          | Entrevistas, Visitas (Futurismo, IA, VR)           | Entusiastas, Industria                        | Visión "desde dentro" de laboratorios y empresas tecnológicas.       |
+| Inglés  | **The Verge**              | Noticias y análisis de tecnología general (con IA) | Audiencia tecnológica general                 | Sólida cobertura de IA dentro de un medio tecnológico amplio.        |
+| Inglés  | **WIRED**                  | Cultura tecnológica, Ética, Análisis (con IA)    | General, Interesados en cultura/sociedad      | Explora el impacto social y ético de la IA.                          |
+| Inglés  | **ColdFusion**             | Mini-documentales sobre tecnología y negocios      | General, Negocios                             | Episodios bien producidos sobre tecnologías disruptivas como la IA.    |
+
+**Canales de YouTube sobre IA (Castellano)**
+
+| Idioma     | Canal                               | Enfoque Principal                                    | Audiencia Objetivo                            | Descripción/Destacado                                                    |
+| :--------- | :---------------------------------- | :--------------------------------------------------- | :-------------------------------------------- | :----------------------------------------------------------------------- |
+| Castellano | **DotCSV (Carlos Santana)**         | Explicación didáctica de IA, ML, Noticias            | Estudiantes, Desarrolladores, Curiosos        | Principal divulgador de IA en español, muy claro y entretenido.           |
+| Castellano | **Nate Gentile**                    | Tecnología general, Hardware (cubre impacto IA)      | Entusiastas de la tecnología, Gamers          | Analiza el impacto de la IA, GPUs para IA, etc.                            |
+| Castellano | **Xataka TV**                       | Noticias y análisis de tecnología general (con IA)   | Audiencia tecnológica general                 | Fuente principal de noticias de tecnología en español, con buena cobertura IA. |
+| Castellano | **Ring R. A. (Inteligencia Artificial)** | Noticias IA, Tutoriales prácticos (Herramientas)     | Usuarios generales, Entusiastas               | Canal dedicado a noticias y tutoriales de herramientas de IA.              |
+| Castellano | **Platzi**                          | Educación online (cursos IA, Programación)           | Estudiantes, Profesionales                    | Muchos vídeos gratuitos explicando conceptos y herramientas de IA.       |
+| Castellano | **La Robot de Platón (Aldo Bartra)** | Divulgación científica general (incluye IA)          | Público general curioso                       | Aborda la IA desde una perspectiva científica amplia y ética.             |
+| Castellano | **VisualPolitik**                   | Geopolítica, Economía (analiza impacto IA)           | Interesados en negocios y política            | Analiza el impacto estratégico y económico global de la IA.            |
+| Castellano | **Antonio G. (Inteligencia Artificial)** | Noticias diarias IA, Tutoriales (Herramientas)       | Usuarios generales, Entusiastas               | Actualizaciones frecuentes y guías prácticas de herramientas.            |
+| Castellano | **Edgar Krawetz (ia.channel)**      | Demostraciones prácticas de herramientas IA, Prompts | Usuarios que quieren aplicar IA              | Enfocado en el uso práctico y demos de herramientas variadas.            |
+| Castellano | **David Bonilla (Bonillaware)**     | Comunidad Tech, Negocios (discute IA)                | Desarrolladores, Emprendedores                | Perspectiva sobre IA desde el mundo del desarrollo y negocio tech.      |
+
+Espero que este formato te sea más útil para comparar los canales.
