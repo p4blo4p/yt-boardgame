@@ -1,0 +1,49 @@
+name: Update Board Game Videos Data
+
+on:
+  workflow_dispatch: # Permite ejecutarlo manualmente desde la pestaña Actions
+  schedule:
+    # Ejecuta todos los días a las 02:00 UTC
+    # Puedes ajustar el cron según tus necesidades.
+    # Visita https://crontab.guru para ayuda con expresiones cron.
+    - cron: '0 2 * * *'
+
+permissions:
+  contents: write # Necesario para hacer commit de los cambios al repositorio
+
+jobs:
+  update-json:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: '3.10' # O la versión que prefieras/necesites
+          cache: 'pip' # Cachea las dependencias para acelerar las ejecuciones
+
+      - name: Install dependencies
+        run: |
+          python -m pip install --upgrade pip
+          pip install yt-dlp
+
+      - name: Run script to fetch video data
+        # Asegúrate de que el nombre del script coincida con el tuyo
+        # Si tu script está en un subdirectorio, ajusta la ruta (ej: python src/extractor.py)
+        run: python tu_script.py # Cambia 'tu_script.py' al nombre real de tu archivo
+
+      - name: Commit and push changes
+        uses: stefanzweifel/git-auto-commit-action@v5
+        with:
+          commit_message: "Automated: Update board game videos JSON"
+          # Asegúrate de que el nombre del archivo coincida con tu OUTPUT_FILE
+          file_pattern: videos_juegos_mesa.json
+          commit_user_name: "GitHub Actions Bot"
+          commit_user_email: "actions@github.com"
+          commit_author: "GitHub Actions Bot <actions@github.com>"
+          # Opcional: Si quieres añadir todos los archivos modificados, usa:
+          # add: "-A"
+          # Opcional: Si tu rama principal no es 'main' o 'master', especifícala
+          # push_options: '--force' # Usar con precaución, generalmente no necesario
