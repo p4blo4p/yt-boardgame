@@ -147,29 +147,35 @@ def actualizar_canales_por_idioma(
 
     return datos_actualizados_idioma
 
-def main_loop():
-    """Bucle principal para la extracción periódica de información."""
-    while True:
-        logging.info("Iniciando ciclo de extracción de videos...")
-        datos_guardados = cargar_videos_existentes()
-        nuevos_datos_globales: Dict[str, Dict[str, List[Dict[str, Any]]]] = {}
+def ejecutar_extraccion_unica():
+    """Ejecuta un solo ciclo de extracción de información."""
+    logging.info("Iniciando ciclo de extracción de videos (ejecución única)...")
+    datos_guardados = cargar_videos_existentes()
+    nuevos_datos_globales: Dict[str, Dict[str, List[Dict[str, Any]]]] = {}
 
-        for idioma, canales_del_idioma in CHANNELS.items():
-            logging.info(f"Procesando canales en '{idioma}'...")
-            datos_existentes_idioma = datos_guardados.get(idioma, {})
-            nuevos_datos_globales[idioma] = actualizar_canales_por_idioma(
-                canales_del_idioma,
-                datos_existentes_idioma
-            )
+    for idioma, canales_del_idioma in CHANNELS.items():
+        logging.info(f"Procesando canales en '{idioma}'...")
+        datos_existentes_idioma = datos_guardados.get(idioma, {})
+        nuevos_datos_globales[idioma] = actualizar_canales_por_idioma(
+            canales_del_idioma,
+            datos_existentes_idioma
+        )
 
-        guardar_datos_videos(nuevos_datos_globales)
-        logging.info(f"Ciclo de extracción completado. Próxima ejecución en {EXTRACTION_INTERVAL_SECONDS / 3600:.1f} horas.")
-        time.sleep(EXTRACTION_INTERVAL_SECONDS)
+    guardar_datos_videos(nuevos_datos_globales)
+    logging.info("Ciclo de extracción (ejecución única) completado.")
 
 if __name__ == '__main__':
+    # Para ejecutar localmente con el bucle:
+    # try:
+    #     main_loop()
+    # except KeyboardInterrupt:
+    #     logging.info("Proceso interrumpido por el usuario.")
+    # except Exception as e:
+    #     logging.critical(f"Error crítico en el bucle principal: {e}", exc_info=True)
+
+    # Para ejecutar una sola vez (ideal para GitHub Actions si se llamara así)
     try:
-        main_loop()
-    except KeyboardInterrupt:
-        logging.info("Proceso interrumpido por el usuario.")
+        ejecutar_extraccion_unica() # Llamar a esta función si la tienes
     except Exception as e:
-        logging.critical(f"Error crítico en el bucle principal: {e}", exc_info=True)
+        logging.critical(f"Error crítico durante la extracción única: {e}", exc_info=True)
+        raise # Propagar el error para que la Action falle si es necesario
