@@ -32,7 +32,7 @@ jobs:
       - name: Run script to fetch video data
         # Asegúrate de que el nombre del script coincida con el tuyo
         # Si tu script está en un subdirectorio, ajusta la ruta (ej: python src/extractor.py)
-        run: python tu_script.py # Cambia 'tu_script.py' al nombre real de tu archivo
+        run: python extraer_info_canales.py # Cambia 'tu_script.py' al nombre real de tu archivo
 
       - name: Commit and push changes
         uses: stefanzweifel/git-auto-commit-action@v5
