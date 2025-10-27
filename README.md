@@ -1,3 +1,242 @@
+# 🎲 YT BoardGame
+
+Una aplicación web Python que funciona como un directorio curado de canales de YouTube especializados en **juegos de mesa e inteligencia artificial**. La aplicación extrae automáticamente videos recientes de estos canales y los presenta en una interfaz web organizada por idioma.
+
+## ✨ Características
+
+- 🌐 **Interfaz web moderna** con diseño responsive
+- 🤖 **Extracción automática** de videos usando yt-dlp
+- 🌍 **Organización por idioma** (inglés y español)
+- 📱 **Design responsive** adaptable a móviles
+- 🔄 **API REST** para integración con otros servicios
+- ⏰ **Actualización automática** con GitHub Actions
+- 📊 **Estadísticas en tiempo real** de canales y videos
+
+## 🚀 Instalación Rápida
+
+### Prerrequisitos
+- Python 3.8 o superior
+- pip (gestor de paquetes de Python)
+
+### Pasos de Instalación
+
+1. **Clonar el repositorio:**
+```bash
+git clone https://github.com/p4blo4p/yt-boardgame.git
+cd yt-boardgame
+```
+
+2. **Instalar dependencias:**
+```bash
+pip install -r requirements.txt
+```
+
+3. **Configurar canales (opcional):**
+Edita el archivo `channels_config.json` para personalizar los canales:
+```json
+{
+  "ingles": {
+    "Tu Canal": "https://www.youtube.com/@tu_canal"
+  },
+  "espanol": {
+    "Tu Canal": "https://www.youtube.com/@tu_canal"
+  }
+}
+```
+
+4. **Ejecutar extracción inicial:**
+```bash
+python extraer_info_canales.py
+```
+
+5. **Iniciar la aplicación web:**
+```bash
+python app.py
+```
+
+6. **Abrir en el navegador:**
+Visita `http://localhost:5000`
+
+## 📁 Estructura del Proyecto
+
+```
+yt-boardgame/
+├── app.py                          # Aplicación web Flask principal
+├── extraer_info_canales.py         # Script de extracción de datos
+├── channels_config.json           # Configuración de canales (JSON)
+├── videos_juegos_mesa.json        # Datos de videos extraídos
+├── requirements.txt               # Dependencias de Python
+├── templates/
+│   └── index.html                # Template HTML principal
+├── README.md                      # Este archivo
+└── .github/
+    └── workflows/
+        └── update_videos_data.yml # GitHub Actions para actualización automática
+```
+
+## 🔧 Configuración
+
+### Variables de Configuración
+
+En `extraer_info_canales.py` puedes ajustar:
+
+```python
+OUTPUT_FILE = "videos_juegos_mesa.json"           # Archivo de salida
+EXTRACTION_INTERVAL_SECONDS = 24 * 3600          # Intervalo de extracción (24h)
+MAX_VIDEOS_TO_CHECK_PER_CHANNEL = 10             # Videos a verificar por canal
+MAX_VIDEOS_PER_CHANNEL = 200                     # Máximo de videos por canal
+REQUEST_DELAY_SECONDS = 2                        # Delay entre requests (segundos)
+```
+
+### Personalizar Canales
+
+Edita `channels_config.json` para:
+- ➕ Agregar nuevos canales
+- 🗑️ Eliminar canales existentes
+- 🌍 Cambiar URLs o nombres
+- 📝 Reorganizar por idiomas
+
+**Ejemplo:**
+```json
+{
+  "ingles": {
+    "Nuevo Canal": "https://www.youtube.com/@nuevocanal"
+  },
+  "espanol": {
+    "Canal Español": "https://www.youtube.com/@canalespanol"
+  }
+}
+```
+
+## 🌐 API Endpoints
+
+La aplicación expone varios endpoints de API:
+
+### GET /
+**Página principal** - Interfaz web con canales organizados
+
+### GET /api/canales
+**Configuración de canales** - Devuelve la configuración JSON de canales
+```bash
+curl http://localhost:5000/api/canales
+```
+
+### GET /api/videos
+**Datos de videos** - Devuelve todos los videos extraídos
+```bash
+curl http://localhost:5000/api/videos
+```
+
+### GET /health
+**Estado del sistema** - Verifica el estado de la aplicación
+```bash
+curl http://localhost:5000/health
+```
+
+## 🔄 Automatización
+
+### GitHub Actions
+El proyecto incluye un workflow automático que:
+- Ejecuta extracción de videos diariamente
+- Actualiza el archivo `videos_juegos_mesa.json`
+- Mantiene los datos siempre actualizados
+
+### Extracción Manual
+```bash
+# Extraer videos una vez
+python extraer_info_canales.py
+
+# Ver logs de extracción
+python extraer_info_canales.py 2>&1 | tee extraction.log
+```
+
+## 🛠️ Desarrollo
+
+### Ejecutar en Modo Desarrollo
+```bash
+python app.py
+# La aplicación estará disponible en http://localhost:5000
+```
+
+### Debugging
+```bash
+# Habilitar modo debug detallado
+export FLASK_DEBUG=1
+python app.py
+```
+
+### Logs
+Los logs se muestran en la consola durante la ejecución:
+```
+2024-01-01 12:00:00 - INFO - Iniciando extracción de videos de canales de YouTube
+2024-01-01 12:00:01 - INFO - Procesando canal The Dice Tower (ingles)
+2024-01-01 12:00:05 - INFO - Canal The Dice Tower: 8 videos nuevos, 45 total
+```
+
+## 📊 Estadísticas y Métricas
+
+La aplicación muestra:
+- **Total de canales** monitoreados
+- **Videos por canal** recientes
+- **Distribución por idioma**
+- **Estado de la última extracción**
+
+## 🐛 Solución de Problemas
+
+### Error: "Archivo no encontrado"
+```bash
+# Ejecutar extracción inicial
+python extraer_info_canales.py
+```
+
+### Error: "JSON inválido"
+```bash
+# Verificar formato del JSON
+python -m json.tool channels_config.json
+```
+
+### Error: "yt-dlp no encontrado"
+```bash
+# Reinstalar dependencias
+pip install --upgrade -r requirements.txt
+```
+
+### Error: "Puerto en uso"
+```bash
+# Cambiar puerto en app.py
+app.run(debug=True, port=8080)
+```
+
+## 📝 Contribuir
+
+1. Fork el proyecto
+2. Crea una rama para tu feature (`git checkout -b feature/AmazingFeature`)
+3. Commit tus cambios (`git commit -m 'Add some AmazingFeature'`)
+4. Push a la rama (`git push origin feature/AmazingFeature`)
+5. Abre un Pull Request
+
+## 📄 Licencia
+
+Este proyecto está bajo la Licencia MIT. Ver `LICENSE` para más detalles.
+
+## 🙏 Agradecimientos
+
+- [yt-dlp](https://github.com/yt-dlp/yt-dlp) - Extracción de videos de YouTube
+- [Flask](https://flask.palletsprojects.com/) - Framework web
+- [YouTube](https://youtube.com) - Plataforma de videos
+
+## 📞 Soporte
+
+Si encuentras problemas o tienes sugerencias:
+
+1. Revisa la sección de [Solución de Problemas](#-solución-de-problemas)
+2. Busca en los [Issues](https://github.com/p4blo4p/yt-boardgame/issues)
+3. Crea un nuevo issue con detalles del problema
+
+---
+
+**¡Disfruta descubriendo nuevos canales de juegos de mesa e IA!** 🎲🤖
+
 # yt-boardgame
 
 ¡Tienes toda la razón! Disculpa la omisión. Aquí tienes la lista actualizada con enlaces a los canales de YouTube:

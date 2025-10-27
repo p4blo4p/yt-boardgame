@@ -1,37 +1,307 @@
 <!DOCTYPE html>
-<html>
+<html lang="es">
 <head>
-    <title>Videos de Juegos de Mesa</title>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>YT BoardGame - Canales de YouTube sobre Juegos de Mesa e IA</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Arial', sans-serif;
+            line-height: 1.6;
+            color: #333;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 20px;
+        }
+
+        .header {
+            text-align: center;
+            margin-bottom: 40px;
+            background: rgba(255, 255, 255, 0.1);
+            backdrop-filter: blur(10px);
+            padding: 30px;
+            border-radius: 15px;
+            box-shadow: 0 8px 32px rgba(0, 0, 0, 0.1);
+        }
+
+        .header h1 {
+            color: white;
+            font-size: 2.5rem;
+            margin-bottom: 10px;
+            text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.3);
+        }
+
+        .header p {
+            color: #f0f0f0;
+            font-size: 1.1rem;
+        }
+
+        .language-section {
+            margin-bottom: 50px;
+        }
+
+        .language-header {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin-bottom: 25px;
+        }
+
+        .language-title {
+            font-size: 2rem;
+            color: white;
+            text-shadow: 1px 1px 2px rgba(0, 0, 0, 0.3);
+            background: rgba(255, 255, 255, 0.2);
+            padding: 10px 30px;
+            border-radius: 25px;
+            backdrop-filter: blur(5px);
+        }
+
+        .channels-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 25px;
+            padding: 0 10px;
+        }
+
+        .channel-card {
+            background: rgba(255, 255, 255, 0.95);
+            border-radius: 15px;
+            padding: 25px;
+            box-shadow: 0 8px 25px rgba(0, 0, 0, 0.15);
+            transition: all 0.3s ease;
+            text-decoration: none;
+            color: inherit;
+            display: block;
+        }
+
+        .channel-card:hover {
+            transform: translateY(-8px);
+            box-shadow: 0 15px 40px rgba(0, 0, 0, 0.2);
+            background: rgba(255, 255, 255, 1);
+        }
+
+        .channel-name {
+            font-size: 1.4rem;
+            font-weight: bold;
+            color: #2c3e50;
+            margin-bottom: 15px;
+            text-align: center;
+        }
+
+        .channel-url {
+            color: #e74c3c;
+            font-size: 0.9rem;
+            text-align: center;
+            word-break: break-all;
+            opacity: 0.8;
+        }
+
+        .videos-info {
+            margin-top: 15px;
+            padding-top: 15px;
+            border-top: 1px solid #eee;
+            text-align: center;
+            color: #666;
+            font-size: 0.9rem;
+        }
+
+        .footer {
+            text-align: center;
+            margin-top: 50px;
+            padding: 20px;
+            background: rgba(255, 255, 255, 0.1);
+            backdrop-filter: blur(10px);
+            border-radius: 15px;
+            color: white;
+        }
+
+        .stats {
+            display: flex;
+            justify-content: center;
+            gap: 30px;
+            margin-bottom: 20px;
+        }
+
+        .stat-item {
+            text-align: center;
+        }
+
+        .stat-number {
+            font-size: 2rem;
+            font-weight: bold;
+            color: #fff;
+            display: block;
+        }
+
+        .stat-label {
+            font-size: 0.9rem;
+            color: #f0f0f0;
+        }
+
+        .refresh-btn {
+            background: linear-gradient(45deg, #f093fb 0%, #f5576c 100%);
+            color: white;
+            border: none;
+            padding: 12px 25px;
+            border-radius: 25px;
+            cursor: pointer;
+            font-size: 1rem;
+            transition: all 0.3s ease;
+            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.2);
+        }
+
+        .refresh-btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 6px 20px rgba(0, 0, 0, 0.3);
+        }
+
+        @media (max-width: 768px) {
+            .header h1 {
+                font-size: 2rem;
+            }
+            
+            .channels-grid {
+                grid-template-columns: 1fr;
+            }
+            
+            .stats {
+                flex-direction: column;
+                gap: 15px;
+            }
+        }
+
+        .loading {
+            text-align: center;
+            color: white;
+            font-size: 1.2rem;
+            margin: 50px 0;
+        }
+
+        .error {
+            background: rgba(231, 76, 60, 0.9);
+            color: white;
+            padding: 20px;
+            border-radius: 10px;
+            text-align: center;
+            margin: 20px 0;
+        }
+    </style>
 </head>
 <body>
-    <h1>Canales en Inglés</h1>
-    {% for canal, videos in canales_ingles.items() %}
-        <h2>{{ canal }}</h2>
-        <ul>
-            {% for video in videos %}
-                <li>
-                    <a href="{{ video.url }}" target="_blank">
-                        <img src="{{ video.thumbnail }}" alt="{{ video.title }}" width="200">
-                        {{ video.title }}
-                    </a>
-                </li>
-            {% endfor %}
-        </ul>
-    {% endfor %}
+    <div class="container">
+        <header class="header">
+            <h1>🎲 YT BoardGame</h1>
+            <p>Directorio curado de canales de YouTube sobre juegos de mesa e inteligencia artificial</p>
+            <button class="refresh-btn" onclick="location.reload()">🔄 Actualizar Datos</button>
+        </header>
 
-    <h1>Canales en Español</h1>
-    {% for canal, videos in canales_espanol.items() %}
-        <h2>{{ canal }}</h2>
-        <ul>
-            {% for video in videos %}
-                <li>
-                    <a href="{{ video.url }}" target="_blank">
-                        <img src="{{ video.thumbnail }}" alt="{{ video.title }}" width="200">
-                        {{ video.title }}
+        <main>
+            <!-- Sección de Canales en Inglés -->
+            <section class="language-section">
+                <div class="language-header">
+                    <h2 class="language-title">🇺🇸 Canales en Inglés</h2>
+                </div>
+                <div class="channels-grid">
+                    {% for nombre, url in canales_ingles.items() %}
+                    <a href="{{ url }}" target="_blank" class="channel-card">
+                        <div class="channel-name">{{ nombre }}</div>
+                        <div class="channel-url">{{ url }}</div>
+                        {% if videos_data and videos_data.ingles and nombre in videos_data.ingles %}
+                        <div class="videos-info">
+                            📹 {{ videos_data.ingles[nombre]|length }} videos recientes
+                        </div>
+                        {% endif %}
                     </a>
-                </li>
-            {% endfor %}
-        </ul>
-    {% endfor %}
+                    {% endfor %}
+                </div>
+            </section>
+
+            <!-- Sección de Canales en Español -->
+            <section class="language-section">
+                <div class="language-header">
+                    <h2 class="language-title">🇪🇸 Canales en Español</h2>
+                </div>
+                <div class="channels-grid">
+                    {% for nombre, url in canales_espanol.items() %}
+                    <a href="{{ url }}" target="_blank" class="channel-card">
+                        <div class="channel-name">{{ nombre }}</div>
+                        <div class="channel-url">{{ url }}</div>
+                        {% if videos_data and videos_data.espanol and nombre in videos_data.espanol %}
+                        <div class="videos-info">
+                            📹 {{ videos_data.espanol[nombre]|length }} videos recientes
+                        </div>
+                        {% endif %}
+                    </a>
+                    {% endfor %}
+                </div>
+            </section>
+        </main>
+
+        <footer class="footer">
+            <div class="stats">
+                <div class="stat-item">
+                    <span class="stat-number">{{ canales_ingles|length + canales_espanol|length }}</span>
+                    <span class="stat-label">Total de Canales</span>
+                </div>
+                <div class="stat-item">
+                    <span class="stat-number">{{ canales_ingles|length }}</span>
+                    <span class="stat-label">Canales en Inglés</span>
+                </div>
+                <div class="stat-item">
+                    <span class="stat-number">{{ canales_espanol|length }}</span>
+                    <span class="stat-label">Canales en Español</span>
+                </div>
+            </div>
+            <p>💡 Proyecto desarrollado con Flask y yt-dlp | Actualización automática diaria</p>
+            <p>🔗 <a href="/api/canales" target="_blank" style="color: white;">API de Canales</a> | 
+               <a href="/api/videos" target="_blank" style="color: white;">API de Videos</a> | 
+               <a href="/health" target="_blank" style="color: white;">Estado del Sistema</a></p>
+        </footer>
+    </div>
+
+    <script>
+        // Añadir interactividad
+        document.addEventListener('DOMContentLoaded', function() {
+            console.log('🎲 YT BoardGame cargado correctamente');
+            
+            // Animación de entrada para las tarjetas
+            const cards = document.querySelectorAll('.channel-card');
+            cards.forEach((card, index) => {
+                card.style.opacity = '0';
+                card.style.transform = 'translateY(20px)';
+                
+                setTimeout(() => {
+                    card.style.transition = 'all 0.5s ease';
+                    card.style.opacity = '1';
+                    card.style.transform = 'translateY(0)';
+                }, index * 100);
+            });
+        });
+
+        // Función para refrescar datos manualmente
+        function refreshData() {
+            const btn = document.querySelector('.refresh-btn');
+            const originalText = btn.textContent;
+            btn.textContent = '⏳ Actualizando...';
+            btn.disabled = true;
+            
+            // Simular actualización (en una implementación real, esto llamaría a una API)
+            setTimeout(() => {
+                location.reload();
+            }, 2000);
+        }
+    </script>
 </body>
 </html>

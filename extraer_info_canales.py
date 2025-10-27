@@ -1,195 +1,154 @@
 import yt_dlp
 import json
 import time
-from datetime import datetime, timezone
+from datetime import datetime, timedelta
 import os
 import logging
 from typing import Dict, List, Any, Optional, Set
 
-# --- Configuración ---
-OUTPUT_FILE = 'videos_juegos_mesa.json'
+# Configuración
+OUTPUT_FILE = "videos_juegos_mesa.json"
 EXTRACTION_INTERVAL_SECONDS = 24 * 3600  # Extracción diaria
-MAX_VIDEOS_TO_CHECK_PER_CHANNEL = 10 # Reducido para pruebas rápidas, puedes aumentarlo a 30
-MAX_VIDEOS_PER_CHANNEL = 200              # Máximo de videos a guardar por canal en el JSON
-REQUEST_DELAY_SECONDS = 2                 # Pausa entre peticiones a YouTube
+MAX_VIDEOS_TO_CHECK_PER_CHANNEL = 10  # Configurado para pruebas rápidas, se puede aumentar a 30
+MAX_VIDEOS_PER_CHANNEL = 200  # Máximo de videos por canal a guardar en JSON
+REQUEST_DELAY_SECONDS = 2  # Pausa entre requests a YouTube
+CHANNELS_CONFIG_FILE = "channels_config.json"
 
-CHANNELS = {
-    "ingles": {
-        "The Dice Tower": "https://www.youtube.com/@TheDiceTower",
-        "Shut Up & Sit Down": "https://www.youtube.com/@shutupandsitdown",
-        # "Tabletop (Wil Wheaton)": "https://www.youtube.com/@tabletop",
-        "BoardGameGeek": "https://www.youtube.com/@boardgamegeek",
-        # "Gaming with Edo": "https://www.youtube.com/@GamingwithEdo",
-        # "No Pun Included": "https://www.youtube.com/@NoPunIncluded",
-        # "Rhado Runs Through": "https://www.youtube.com/@rahdo",
-        # "Heavy Cardboard": "https://www.youtube.com/@HeavyCardboard"
-    },
-    "espanol": {
-        "Análisis Parálisis": "https://www.youtube.com/@AnalisisParalisis",
-        # "El Dado Friki": "https://www.youtube.com/@ElDadoFriki",
-        # "Jugando con Ketty": "https://www.youtube.com/@JugandoconKetty",
-        # "Mesa para Dos": "https://www.youtube.com/@MesaparaDos",
-        # "Ciudadano Meeple": "https://www.youtube.com/@CiudadanoMeeple",
-        # "Juegos de Mesa 221B": "https://www.youtube.com/@JuegosdeMesa221B",
-        # "La Mazmorra de Pacheco": "https://www.youtube.com/@lamazmorradepacheco",
-        # "La Guarida del Goblin": "https://www.youtube.com/@LaGuaridadelGoblin"
-    }
-}
+# Cargar configuración de canales desde JSON
+def cargar_configuracion_canales():
+    """Carga la configuración de canales desde el archivo JSON."""
+    try:
+        with open(CHANNELS_CONFIG_FILE, 'r', encoding='utf-8') as f:
+            return json.load(f)
+    except FileNotFoundError:
+        logging.error(f"Archivo de configuración {CHANNELS_CONFIG_FILE} no encontrado.")
+        return {"ingles": {}, "espanol": {}}
+    except json.JSONDecodeError as e:
+        logging.error(f"Error al decodificar JSON en {CHANNELS_CONFIG_FILE}: {e}")
+        return {"ingles": {}, "espanol": {}}
 
-# Configuración del logging
-logging.basicConfig(level=logging.INFO, format='%(asctime)s - %(levelname)s - %(message)s')
+# Configuración de canales cargada dinámicamente
+CHANNELS = cargar_configuracion_canales()
 
-def _construir_info_video(entry: Dict[str, Any], canal_nombre_global: str, canal_url_global: str) -> Dict[str, Any]:
-    """Construye el diccionario de información para un video."""
-    video_id = entry.get('id')
+def _construir_info_video(video_data: Dict[str, Any], nombre_canal: str, url_canal: str) -> Dict[str, Any]:
+    """Construye la información de un video en el formato estándar."""
     return {
-        'id': video_id,
-        'title': entry.get('title'),
-        'url': entry.get('original_url') or (f"https://www.youtube.com/watch?v={video_id}" if video_id else None),
-        'thumbnail': entry.get('thumbnail'), # Esta es la URL del thumbnail por defecto
-        # entry.get('thumbnails') es una lista de thumbnails de diferentes tamaños si necesitas más control
-        'channel_name': canal_nombre_global, # Usamos el nombre del canal que estamos procesando
-        'channel_url': canal_url_global,   # Usamos la URL del canal que estamos procesando
-        'fetched_at': datetime.now(timezone.utc).isoformat(),
-        'duration': entry.get('duration'), # Opcional: duración en segundos
-        'upload_date': entry.get('upload_date'), # Opcional: YYYYMMDD
-        'view_count': entry.get('view_count') # Opcional
+        "id": video_data.get("id", ""),
+        "titulo": video_data.get("title", ""),
+        "url": video_data.get("webpage_url", ""),
+        "thumbnail": video_data.get("thumbnail", ""),
+        "nombre_canal": nombre_canal,
+        "url_canal": url_canal,
+        "fecha_extraccion": datetime.now().strftime("%Y-%m-%d %H:%M:%S"),
+        "duracion": video_data.get("duration", 0),
+        "fecha_subida": video_data.get("upload_date", ""),
+        "visualizaciones": video_data.get("view_count", 0)
     }
 
-def extraer_videos_recientes_canal(
-    canal_nombre: str,
-    canal_url: str,
-    ids_videos_existentes: Set[str]
-) -> List[Dict[str, Any]]:
-    """
-    Extrae información de los videos más recientes de un canal que no están en ids_videos_existentes.
-    """
-    ydl_opts = {
-        # 'extract_flat': True, # COMENTADO/ELIMINADO para obtener thumbnails y más detalles
+def extraer_videos_recientes_canal(url_canal: str, nombre_canal: str, ids_existentes: Set[str]) -> List[Dict[str, Any]]:
+    """Extrae videos recientes de un canal específico."""
+    videos = []
+    
+    opciones = {
         'quiet': True,
         'ignoreerrors': True,
         'playlistend': MAX_VIDEOS_TO_CHECK_PER_CHANNEL,
-        'dateafter': (datetime.now() - timedelta(days=90)).strftime('%Y%m%d') # Opcional: solo videos de los últimos X días
+        'dateafter': (datetime.now() - timedelta(days=90)).strftime('%Y%m%d')
     }
-
-    nuevos_videos: List[Dict[str, Any]] = []
-    logging.info(f"Extrayendo detalles de videos de '{canal_nombre}' ({canal_url})...")
-
+    
     try:
-        with yt_dlp.YoutubeDL(ydl_opts) as ydl:
-            # info_dict aquí es la info de la playlist/canal
-            info_dict = ydl.extract_info(canal_url, download=False)
-
-            if not info_dict:
-                logging.warning(f"No se pudo obtener información para el canal '{canal_nombre}'.")
-                return []
-
-            entries = info_dict.get('entries')
-            if not entries:
-                logging.info(f"No se encontraron videos (o entradas válidas) recientes para el canal '{canal_nombre}'.")
-                return []
-
-            # El nombre del canal y la URL se toman de la información de la playlist/canal principal
-            # 'uploader' suele ser más fiable que 'channel' para el nombre del canal en info_dict de playlists
-            nombre_canal_real = info_dict.get('uploader', info_dict.get('channel', canal_nombre))
-            url_canal_real = info_dict.get('uploader_url', info_dict.get('channel_url', canal_url))
-
-
-            for entry in entries:
-                if not entry: # yt-dlp puede devolver None en la lista de entries con ignoreerrors
-                    logging.warning(f"Entrada de video vacía encontrada en '{nombre_canal_real}'. Saltando.")
-                    continue
-
-                video_id = entry.get('id')
-                if not video_id:
-                    logging.warning(f"Video sin ID en '{nombre_canal_real}', título: {entry.get('title', 'N/A')}. Saltando.")
-                    continue
-                
-                if entry.get('thumbnail') is None:
-                    logging.debug(f"Video '{video_id}' ('{entry.get('title')}') en '{nombre_canal_real}' no tiene thumbnail URL directamente en 'thumbnail'. Revisando 'thumbnails'.")
-                    # A veces 'thumbnail' es None pero 'thumbnails' (lista) existe.
-                    # _construir_info_video usa entry.get('thumbnail'), que está bien para el thumbnail por defecto.
-
-                if video_id not in ids_videos_existentes:
-                    video_info = _construir_info_video(entry, nombre_canal_real, url_canal_real)
-                    nuevos_videos.append(video_info)
-
+        with yt_dlp.YoutubeDL(opciones) as ydl:
+            info = ydl.extract_info(url_canal, download=False)
+            
+            if 'entries' in info:
+                for entrada in info['entries']:
+                    if entrada and entrada.get('id') not in ids_existentes:
+                        video_info = _construir_info_video(entrada, nombre_canal, url_canal)
+                        videos.append(video_info)
+            
+            # Pausa entre requests
+            time.sleep(REQUEST_DELAY_SECONDS)
+            
     except yt_dlp.utils.DownloadError as e:
-        logging.error(f"Error de yt-dlp al extraer de '{canal_nombre}': {e}")
+        logging.warning(f"Error al extraer videos del canal {nombre_canal}: {e}")
     except Exception as e:
-        logging.error(f"Error inesperado al extraer de '{canal_nombre}': {e}", exc_info=True)
+        logging.error(f"Error inesperado al procesar canal {nombre_canal}: {e}")
+    
+    return videos
 
-    logging.info(f"Encontrados {len(nuevos_videos)} nuevos videos para '{canal_nombre}'.")
-    return nuevos_videos
-
-def guardar_datos_videos(data: Dict[str, Any]) -> None:
-    """Guarda los datos de los videos en el archivo JSON."""
+def guardar_datos_videos(datos: Dict[str, Any]) -> None:
+    """Guarda los datos de videos en un archivo JSON."""
     try:
         with open(OUTPUT_FILE, 'w', encoding='utf-8') as f:
-            json.dump(data, f, indent=4, ensure_ascii=False)
-        logging.info(f"Datos guardados en '{OUTPUT_FILE}'.")
-    except IOError as e:
-        logging.error(f"Error al guardar datos en '{OUTPUT_FILE}': {e}")
+            json.dump(datos, f, ensure_ascii=False, indent=4)
+        logging.info(f"Datos guardados exitosamente en {OUTPUT_FILE}")
+    except Exception as e:
+        logging.error(f"Error al guardar datos: {e}")
 
-def cargar_videos_existentes() -> Dict[str, Dict[str, List[Dict[str, Any]]]]:
-    """Carga los datos de videos existentes desde el archivo JSON."""
-    if os.path.exists(OUTPUT_FILE):
-        try:
+def cargar_videos_existentes() -> Dict[str, Any]:
+    """Carga videos existentes del archivo JSON."""
+    try:
+        if os.path.exists(OUTPUT_FILE):
             with open(OUTPUT_FILE, 'r', encoding='utf-8') as f:
-                data = json.load(f)
-                # Asegurar estructura esperada
-                if not isinstance(data, dict): return {"ingles": {}, "espanol": {}}
-                if "ingles" not in data: data["ingles"] = {}
-                if "espanol" not in data: data["espanol"] = {}
-                return data
-        except (IOError, json.JSONDecodeError) as e:
-            logging.error(f"Error al cargar '{OUTPUT_FILE}': {e}. Se usará una estructura vacía.")
-    return {"ingles": {}, "espanol": {}}
+                return json.load(f)
+        else:
+            logging.info("Archivo de datos no existe, creando estructura nueva")
+            return {"ingles": {}, "espanol": {}}
+    except (json.JSONDecodeError, IOError) as e:
+        logging.warning(f"Error al cargar datos existentes: {e}")
+        return {"ingles": {}, "espanol": {}}
 
-def actualizar_canales_por_idioma(
-    canales_a_procesar: Dict[str, str],
-    datos_existentes_del_idioma: Dict[str, List[Dict[str, Any]]]
-) -> Dict[str, List[Dict[str, Any]]]:
-    datos_actualizados_idioma: Dict[str, List[Dict[str, Any]]] = {}
-
-    for nombre_canal_config, url_canal_config in canales_a_procesar.items():
-        # Usamos nombre_canal_config como clave en nuestro JSON, pero la info real del canal vendrá de yt-dlp
-        videos_antiguos_canal = datos_existentes_del_idioma.get(nombre_canal_config, [])
-        ids_existentes = {video['id'] for video in videos_antiguos_canal if video.get('id')}
-
-        nuevos_videos = extraer_videos_recientes_canal(nombre_canal_config, url_canal_config, ids_existentes)
-
-        # Combinar nuevos videos (al principio) con los antiguos, y limitar la cantidad total
-        # Los nuevos videos ya vienen con el nombre de canal y URL actualizados por yt-dlp si es necesario
-        lista_videos_combinada = nuevos_videos + videos_antiguos_canal
+def actualizar_canales_por_idioma(idioma: str, datos_existentes: Dict[str, Any], canales: Dict[str, str]) -> Dict[str, Any]:
+    """Actualiza los datos para un idioma específico."""
+    nuevos_datos = datos_existentes.get(idioma, {})
+    
+    for nombre_canal, url_canal in canales.items():
+        logging.info(f"Procesando canal {nombre_canal} ({idioma})")
         
-        # Asegurarse de que el nombre del canal en la clave del diccionario es el que usamos en la config
-        datos_actualizados_idioma[nombre_canal_config] = lista_videos_combinada[:MAX_VIDEOS_PER_CHANNEL]
-
-        time.sleep(REQUEST_DELAY_SECONDS)
-
-    return datos_actualizados_idioma
+        # Obtener IDs existentes
+        ids_existentes = set()
+        if nombre_canal in nuevos_datos:
+            ids_existentes = {video.get("id", "") for video in nuevos_datos[nombre_canal]}
+            ids_existentes.discard("")  # Remover strings vacíos
+        
+        # Extraer videos nuevos
+        videos_nuevos = extraer_videos_recientes_canal(url_canal, nombre_canal, ids_existentes)
+        
+        # Combinar con videos existentes
+        videos_existentes = nuevos_datos.get(nombre_canal, [])
+        todos_los_videos = videos_existentes + videos_nuevos
+        
+        # Limitar número de videos por canal
+        todos_los_videos = todos_los_videos[:MAX_VIDEOS_PER_CHANNEL]
+        
+        nuevos_datos[nombre_canal] = todos_los_videos
+        
+        logging.info(f"Canal {nombre_canal}: {len(videos_nuevos)} videos nuevos, {len(todos_los_videos)} total")
+    
+    return nuevos_datos
 
 def ejecutar_extraccion_unica():
-    logging.info("Iniciando ciclo de extracción de videos (ejecución única)...")
-    datos_guardados = cargar_videos_existentes()
-    nuevos_datos_globales: Dict[str, Dict[str, List[Dict[str, Any]]]] = {"ingles": {}, "espanol": {}}
+    """Ejecuta una extracción única de videos de todos los canales."""
+    logging.info("Iniciando extracción de videos de canales de YouTube")
+    
+    # Cargar datos existentes
+    datos = cargar_videos_existentes()
+    
+    # Procesar canales en inglés
+    if "ingles" in CHANNELS:
+        logging.info("Procesando canales en inglés")
+        datos["ingles"] = actualizar_canales_por_idioma("ingles", datos, CHANNELS["ingles"])
+    
+    # Procesar canales en español
+    if "espanol" in CHANNELS:
+        logging.info("Procesando canales en español")
+        datos["espanol"] = actualizar_canales_por_idioma("espanol", datos, CHANNELS["espanol"])
+    
+    # Guardar datos actualizados
+    guardar_datos_videos(datos)
+    
+    logging.info("Extracción completada exitosamente")
 
-    for idioma, canales_del_idioma_config in CHANNELS.items():
-        logging.info(f"Procesando canales en '{idioma}'...")
-        datos_existentes_idioma = datos_guardados.get(idioma, {})
-        nuevos_datos_globales[idioma] = actualizar_canales_por_idioma(
-            canales_del_idioma_config,
-            datos_existentes_idioma
-        )
-
-    guardar_datos_videos(nuevos_datos_globales)
-    logging.info("Ciclo de extracción (ejecución única) completado.")
-
-if __name__ == '__main__':
-    from datetime import timedelta # Asegurar que timedelta está importado si se usa 'dateafter'
-    try:
-        ejecutar_extraccion_unica()
-    except Exception as e:
-        logging.critical(f"Error crítico durante la extracción única: {e}", exc_info=True)
-        # raise # Descomentar si se quiere que la Action falle explícitamente
+if __name__ == "__main__":
+    logging.basicConfig(level=logging.INFO, format='%(asctime)s - %(levelname)s - %(message)s')
+    ejecutar_extraccion_unica()
