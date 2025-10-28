@@ -1,0 +1,44 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>{% block title %}YT BoardGame{% endblock %}</title>
+    <meta name="description" content="{% block description %}Directorio curado de canales de YouTube sobre juegos de mesa e inteligencia artificial. Descubre los mejores canales organizados por idioma.{% endblock %}">
+    <meta name="keywords" content="{% block keywords %}juegos de mesa, YouTube, canales, IA, inteligencia artificial, board games, reviews{% endblock %}">
+    <link rel="canonical" href="https://p4blo4p.github.io/yt-boardgame-static/{% block canonical_path %}index.html{% endblock %}">
+
+    <!-- Open Graph / Facebook -->
+    <meta property="og:type" content="website">
+    <meta property="og:url" content="https://p4blo4p.github.io/yt-boardgame-static/{% block og_url_path %}index.html{% endblock %}">
+    <meta property="og:title" content="{% block og_title %}YT BoardGame - Canales de Juegos de Mesa e IA{% endblock %}">
+    <meta property="og:description" content="{% block og_description %}Directorio curado de canales de YouTube sobre juegos de mesa e inteligencia artificial. Descubre los mejores canales organizados por idioma.{% endblock %}">
+    <meta property="og:image" content="https://p4blo4p.github.io/yt-boardgame-static/static/og_image.png"> <!-- Asegúrate de tener esta imagen -->
+
+    <!-- Twitter -->
+    <meta property="twitter:card" content="summary_large_image">
+    <meta property="twitter:url" content="https://p4blo4p.github.io/yt-boardgame-static/{% block twitter_url_path %}index.html{% endblock %}">
+    <meta property="twitter:title" content="{% block twitter_title %}YT BoardGame - Canales de Juegos de Mesa e IA{% endblock %}">
+    <meta property="twitter:description" content="{% block twitter_description %}Directorio curado de canales de YouTube sobre juegos de mesa e inteligencia artificial. Descubre los mejores canales organizados por idioma.{% endblock %}">
+    <meta property="twitter:image" content="https://p4blo4p.github.io/yt-boardgame-static/static/og_image.png"> <!-- Asegúrate de tener esta imagen -->
+
+    <link rel="stylesheet" href="static/style.css">
+    {% block head_extra %}{% endblock %}
+</head>
+<body>
+    <div class="container">
+        {% block content %}{% endblock %}
+
+        <footer class="footer">
+            <p>💡 Proyecto automatizado con GitHub Actions | Extracción diaria de videos</p>
+            <p>🔗 <a href="https://github.com/p4blo4p/yt-boardgame" target="_blank">Código Fuente</a> | 
+               <a href="https://github.com/p4blo4p/yt-boardgame-extractor" target="_blank">Extractor</a> | 
+               <a href="https://youtube.com" target="_blank">YouTube</a></p>
+            <p style="font-size: 0.8rem; opacity: 0.8;">Generado automáticamente por YT BoardGame Extractor</p>
+        </footer>
+    </div>
+
+    <script src="static/script.js"></script>
+    {% block body_extra %}{% endblock %}
+</body>
+</html>

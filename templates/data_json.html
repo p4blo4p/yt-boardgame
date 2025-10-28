@@ -1,0 +1,76 @@
+{% extends "base.html" %}
+
+{% block title %}Datos JSON - YT BoardGame{% endblock %}
+{% block description %}Datos completos de videos extraídos para YT BoardGame.{% endblock %}
+{% block canonical_path %}data.html{% endblock %}
+{% block og_url_path %}data.html{% endblock %}
+{% block twitter_url_path %}data.html{% endblock %}
+
+
+{% block head_extra %}
+    <style>
+        body {
+            font-family: 'Monaco', 'Consolas', monospace;
+            background: #1e1e1e;
+            color: #d4d4d4;
+            margin: 0;
+            padding: 20px;
+        }
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            background: #252526;
+            border-radius: 8px;
+            overflow: hidden;
+        }
+        .header {
+            background: #007acc;
+            color: white;
+            padding: 20px;
+            text-align: center;
+        }
+        .json-content {
+            padding: 20px;
+            overflow: auto;
+            max-height: 80vh; /* Ajustado para mejor visualización */
+        }
+        pre {
+            margin: 0;
+            white-space: pre-wrap;
+            word-wrap: break-word;
+        }
+        .back-link {
+            display: inline-block;
+            background: #007acc;
+            color: white;
+            padding: 10px 20px;
+            text-decoration: none;
+            border-radius: 5px;
+            margin-bottom: 20px;
+        }
+        .back-link:hover {
+            background: #005a9e;
+        }
+        /* Ocultar el footer en la página JSON */
+        footer.footer {
+            display: none;
+        }
+    </style>
+{% endblock %}
+
+{% block content %}
+    <div class="container">
+        <div class="header">
+            <h1>📊 Datos JSON - YT BoardGame</h1>
+            <p>Datos completos de videos extraídos</p>
+        </div>
+        <div class="json-content">
+            <a href="index.html" class="back-link">← Volver al inicio</a>
+            <pre>{{ json_content }}</pre>
+        </div>
+    </div>
+{% endblock %}
+
+{% block body_extra %}
+    <!-- No scripts adicionales para la página JSON -->
+{% endblock %}
