@@ -77,9 +77,257 @@
                 "channel_url": "https://www.youtube.com/channel/UC3kCMqa1tEnlPyt0fvFUS0A",
                 "fetched_at": "2025-06-05T09:23:49.528020+00:00"
             }
+        ],
+        "Tabletop (Wil Wheaton)": [],
+        "Gaming with Edo": [
+            {
+                "id": "UCpvwHi-2kifAtpvZ64gBv9A",
+                "titulo": "Gaming with Edo & Jessica - Videos",
+                "url": "https://www.youtube.com/@GamingwithEdo/videos",
+                "thumbnail": "",
+                "nombre_canal": "Gaming with Edo",
+                "url_canal": "https://www.youtube.com/@GamingwithEdo",
+                "fecha_extraccion": "2025-10-28 03:08:41",
+                "duracion": 0,
+                "fecha_subida": "",
+                "visualizaciones": null
+            },
+            {
+                "id": "UCpvwHi-2kifAtpvZ64gBv9A",
+                "titulo": "Gaming with Edo & Jessica - Shorts",
+                "url": "https://www.youtube.com/@GamingwithEdo/shorts",
+                "thumbnail": "",
+                "nombre_canal": "Gaming with Edo",
+                "url_canal": "https://www.youtube.com/@GamingwithEdo",
+                "fecha_extraccion": "2025-10-28 03:08:41",
+                "duracion": 0,
+                "fecha_subida": "",
+                "visualizaciones": null
+            }
+        ],
+        "No Pun Included": [
+            {
+                "id": "UCtU-oQXFKUMFvhunPrx7U-w",
+                "titulo": "No Pun Included - Videos",
+                "url": "https://www.youtube.com/@NoPunIncluded/videos",
+                "thumbnail": "",
+                "nombre_canal": "No Pun Included",
+                "url_canal": "https://www.youtube.com/@NoPunIncluded",
+                "fecha_extraccion": "2025-10-28 03:08:54",
+                "duracion": 0,
+                "fecha_subida": "",
+                "visualizaciones": null
+            },
+            {
+                "id": "UCtU-oQXFKUMFvhunPrx7U-w",
+                "titulo": "No Pun Included - Shorts",
+                "url": "https://www.youtube.com/@NoPunIncluded/shorts",
+                "thumbnail": "",
+                "nombre_canal": "No Pun Included",
+                "url_canal": "https://www.youtube.com/@NoPunIncluded",
+                "fecha_extraccion": "2025-10-28 03:08:54",
+                "duracion": 0,
+                "fecha_subida": "",
+                "visualizaciones": null
+            }
+        ],
+        "Rhado Runs Through": [
+            {
+                "id": "UCoLvU6o3JnE341uPAQ9KCUQ",
+                "titulo": "Rahdo Runs Through - Videos",
+                "url": "https://www.youtube.com/@rahdo/videos",
+                "thumbnail": "",
+                "nombre_canal": "Rhado Runs Through",
+                "url_canal": "https://www.youtube.com/@rahdo",
+                "fecha_extraccion": "2025-10-28 03:09:16",
+                "duracion": 0,
+                "fecha_subida": "",
+                "visualizaciones": null
+            },
+            {
+                "id": "UCoLvU6o3JnE341uPAQ9KCUQ",
+                "titulo": "Rahdo Runs Through - Live",
+                "url": "https://www.youtube.com/@rahdo/streams",
+                "thumbnail": "",
+                "nombre_canal": "Rhado Runs Through",
+                "url_canal": "https://www.youtube.com/@rahdo",
+                "fecha_extraccion": "2025-10-28 03:09:16",
+                "duracion": 0,
+                "fecha_subida": "",
+                "visualizaciones": null
+            }
+        ],
+        "Heavy Cardboard": [
+            {
+                "id": "UCnuxFrI7_2mBmeay2R5FhXg",
+                "titulo": "Heavy Cardboard - Videos",
+                "url": "https://www.youtube.com/@HeavyCardboard/videos",
+                "thumbnail": "",
+                "nombre_canal": "Heavy Cardboard",
+                "url_canal": "https://www.youtube.com/@HeavyCardboard",
+                "fecha_extraccion": "2025-10-28 03:09:36",
+                "duracion": 0,
+                "fecha_subida": "",
+                "visualizaciones": null
+            },
+            {
+                "id": "UCnuxFrI7_2mBmeay2R5FhXg",
+                "titulo": "Heavy Cardboard - Live",
+                "url": "https://www.youtube.com/@HeavyCardboard/streams",
+                "thumbnail": "",
+                "nombre_canal": "Heavy Cardboard",
+                "url_canal": "https://www.youtube.com/@HeavyCardboard",
+                "fecha_extraccion": "2025-10-28 03:09:36",
+                "duracion": 0,
+                "fecha_subida": "",
+                "visualizaciones": null
+            }
         ]
     },
     "espanol": {
-        "Análisis Parálisis": []
+        "Análisis Parálisis": [],
+        "El Dado Friki": [],
+        "Jugando con Ketty": [
+            {
+                "id": "UCDknd-PnmunmWcc0yJv5k0w",
+                "titulo": "JugandoConKetty - Videos",
+                "url": "https://www.youtube.com/@JugandoconKetty/videos",
+                "thumbnail": "",
+                "nombre_canal": "Jugando con Ketty",
+                "url_canal": "https://www.youtube.com/@JugandoconKetty",
+                "fecha_extraccion": "2025-10-28 03:10:05",
+                "duracion": 0,
+                "fecha_subida": "",
+                "visualizaciones": null
+            },
+            {
+                "id": "UCDknd-PnmunmWcc0yJv5k0w",
+                "titulo": "JugandoConKetty - Live",
+                "url": "https://www.youtube.com/@JugandoconKetty/streams",
+                "thumbnail": "",
+                "nombre_canal": "Jugando con Ketty",
+                "url_canal": "https://www.youtube.com/@JugandoconKetty",
+                "fecha_extraccion": "2025-10-28 03:10:05",
+                "duracion": 0,
+                "fecha_subida": "",
+                "visualizaciones": null
+            },
+            {
+                "id": "UCDknd-PnmunmWcc0yJv5k0w",
+                "titulo": "JugandoConKetty - Shorts",
+                "url": "https://www.youtube.com/@JugandoconKetty/shorts",
+                "thumbnail": "",
+                "nombre_canal": "Jugando con Ketty",
+                "url_canal": "https://www.youtube.com/@JugandoconKetty",
+                "fecha_extraccion": "2025-10-28 03:10:05",
+                "duracion": 0,
+                "fecha_subida": "",
+                "visualizaciones": null
+            }
+        ],
+        "Mesa para Dos": [
+            {
+                "id": "UChCu9DoQaIVLqff2nrCAZQA",
+                "titulo": "MesaParaDos - Videos",
+                "url": "https://www.youtube.com/@MesaparaDos/videos",
+                "thumbnail": "",
+                "nombre_canal": "Mesa para Dos",
+                "url_canal": "https://www.youtube.com/@MesaparaDos",
+                "fecha_extraccion": "2025-10-28 03:10:16",
+                "duracion": 0,
+                "fecha_subida": "",
+                "visualizaciones": null
+            },
+            {
+                "id": "UChCu9DoQaIVLqff2nrCAZQA",
+                "titulo": "MesaParaDos - Shorts",
+                "url": "https://www.youtube.com/@MesaparaDos/shorts",
+                "thumbnail": "",
+                "nombre_canal": "Mesa para Dos",
+                "url_canal": "https://www.youtube.com/@MesaparaDos",
+                "fecha_extraccion": "2025-10-28 03:10:16",
+                "duracion": 0,
+                "fecha_subida": "",
+                "visualizaciones": null
+            }
+        ],
+        "Ciudadano Meeple": [],
+        "Juegos de Mesa 221B": [
+            {
+                "id": "UCNJQ2j-z1RZRoM16SfG1S9Q",
+                "titulo": "Juegos de mesa 221B - Videos",
+                "url": "https://www.youtube.com/@JuegosdeMesa221B/videos",
+                "thumbnail": "",
+                "nombre_canal": "Juegos de Mesa 221B",
+                "url_canal": "https://www.youtube.com/@JuegosdeMesa221B",
+                "fecha_extraccion": "2025-10-28 03:10:45",
+                "duracion": 0,
+                "fecha_subida": "",
+                "visualizaciones": null
+            },
+            {
+                "id": "UCNJQ2j-z1RZRoM16SfG1S9Q",
+                "titulo": "Juegos de mesa 221B - Live",
+                "url": "https://www.youtube.com/@JuegosdeMesa221B/streams",
+                "thumbnail": "",
+                "nombre_canal": "Juegos de Mesa 221B",
+                "url_canal": "https://www.youtube.com/@JuegosdeMesa221B",
+                "fecha_extraccion": "2025-10-28 03:10:45",
+                "duracion": 0,
+                "fecha_subida": "",
+                "visualizaciones": null
+            },
+            {
+                "id": "UCNJQ2j-z1RZRoM16SfG1S9Q",
+                "titulo": "Juegos de mesa 221B - Shorts",
+                "url": "https://www.youtube.com/@JuegosdeMesa221B/shorts",
+                "thumbnail": "",
+                "nombre_canal": "Juegos de Mesa 221B",
+                "url_canal": "https://www.youtube.com/@JuegosdeMesa221B",
+                "fecha_extraccion": "2025-10-28 03:10:45",
+                "duracion": 0,
+                "fecha_subida": "",
+                "visualizaciones": null
+            }
+        ],
+        "La Mazmorra de Pacheco": [
+            {
+                "id": "UCIDey2a9aNTI94j4D9dIpVg",
+                "titulo": "La Mazmorra de Pacheco - Juegos de mesa y rol - Videos",
+                "url": "https://www.youtube.com/@lamazmorradepacheco/videos",
+                "thumbnail": "",
+                "nombre_canal": "La Mazmorra de Pacheco",
+                "url_canal": "https://www.youtube.com/@lamazmorradepacheco",
+                "fecha_extraccion": "2025-10-28 03:11:14",
+                "duracion": 0,
+                "fecha_subida": "",
+                "visualizaciones": null
+            },
+            {
+                "id": "UCIDey2a9aNTI94j4D9dIpVg",
+                "titulo": "La Mazmorra de Pacheco - Juegos de mesa y rol - Live",
+                "url": "https://www.youtube.com/@lamazmorradepacheco/streams",
+                "thumbnail": "",
+                "nombre_canal": "La Mazmorra de Pacheco",
+                "url_canal": "https://www.youtube.com/@lamazmorradepacheco",
+                "fecha_extraccion": "2025-10-28 03:11:14",
+                "duracion": 0,
+                "fecha_subida": "",
+                "visualizaciones": null
+            },
+            {
+                "id": "UCIDey2a9aNTI94j4D9dIpVg",
+                "titulo": "La Mazmorra de Pacheco - Juegos de mesa y rol - Shorts",
+                "url": "https://www.youtube.com/@lamazmorradepacheco/shorts",
+                "thumbnail": "",
+                "nombre_canal": "La Mazmorra de Pacheco",
+                "url_canal": "https://www.youtube.com/@lamazmorradepacheco",
+                "fecha_extraccion": "2025-10-28 03:11:14",
+                "duracion": 0,
+                "fecha_subida": "",
+                "visualizaciones": null
+            }
+        ],
+        "La Guarida del Goblin": []
     }
 }
