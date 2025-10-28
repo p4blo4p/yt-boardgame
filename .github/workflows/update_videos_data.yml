@@ -1,49 +1,103 @@
-name: Update Board Game Videos Data
+# INSTRUCCIONES PARA EL WORKFLOW DE GITHUB ACTIONS
+# =================================================
+
+# PASO 1: Crear el directorio para el workflow
+# En tu repositorio yt-boardgame-extractor, crea esta estructura:
+# .github/workflows/
+
+# PASO 2: Copiar este contenido al archivo:
+# .github/workflows/generate-and-deploy.yml
+
+# PASO 3: El contenido completo del archivo debe ser:
+
+name: Generate and Deploy Board Game Videos
 
 on:
-  workflow_dispatch: # Permite ejecutarlo manualmente desde la pestaña Actions
   schedule:
-    # Ejecuta todos los días a las 02:00 UTC
-    # Puedes ajustar el cron según tus necesidades.
-    # Visita https://crontab.guru para ayuda con expresiones cron.
-    - cron: '0 2 * * *'
-
-permissions:
-  contents: write # Necesario para hacer commit de los cambios al repositorio
+    # Run daily at 12:00 UTC (which is 7:00 AM EST, 1:00 PM CET)
+    - cron: '0 12 * * *'
+  workflow_dispatch:
+    # Allow manual triggering
 
 jobs:
-  update-json:
+  extract-and-deploy:
     runs-on: ubuntu-latest
+    
     steps:
-      - name: Checkout repository
-        uses: actions/checkout@v4
+    - name: Checkout extractor repository
+      uses: actions/checkout@v4
+      with:
+        token: ${{ secrets.GITHUB_TOKEN }}
+        repository: ${{ github.repository }}
 
-      - name: Set up Python
-        uses: actions/setup-python@v5
-        with:
-          python-version: '3.10' # O la versión que prefieras/necesites
-          cache: 'pip' # Cachea las dependencias para acelerar las ejecuciones
+    - name: Set up Python
+      uses: actions/setup-python@v4
+      with:
+        python-version: '3.9'
 
-      - name: Install dependencies
-        run: |
-          python -m pip install --upgrade pip
-          pip install yt-dlp
+    - name: Install dependencies
+      run: |
+        python -m pip install --upgrade pip
+        pip install -r requirements.txt
 
-      - name: Run script to fetch video data
-        # Asegúrate de que el nombre del script coincida con el tuyo
-        # Si tu script está en un subdirectorio, ajusta la ruta (ej: python src/extractor.py)
-        run: python extraer_info_canales.py # Cambia 'tu_script.py' al nombre real de tu archivo
+    - name: Extract video information
+      run: |
+        python extraer_info_canales_refactored.py
 
-      - name: Commit and push changes
-        uses: stefanzweifel/git-auto-commit-action@v5
-        with:
-          commit_message: "Automated: Update board game videos JSON"
-          # Asegúrate de que el nombre del archivo coincida con tu OUTPUT_FILE
-          file_pattern: videos_juegos_mesa.json
-          commit_user_name: "GitHub Actions Bot"
-          commit_user_email: "actions@github.com"
-          commit_author: "GitHub Actions Bot <actions@github.com>"
-          # Opcional: Si quieres añadir todos los archivos modificados, usa:
-          # add: "-A"
-          # Opcional: Si tu rama principal no es 'main' o 'master', especifícala
-          # push_options: '--force' # Usar con precaución, generalmente no necesario
+    - name: Generate static pages
+      run: |
+        python generate_static_pages.py
+
+    - name: Commit extracted data and static pages
+      run: |
+        git config --local user.email "action@github.com"
+        git config --local user.name "GitHub Action"
+        git add -A
+        git diff --staged --quiet || git commit -m "Update video data and static pages - $(date '+%Y-%m-%d %H:%M:%S')"
+        git push
+
+    - name: Checkout static repository
+      uses: actions/checkout@v4
+      with:
+        token: ${{ secrets.GITHUB_TOKEN }}
+        repository: ${{ github.repository_owner }}/yt-boardgame-static
+        path: static-repo
+
+    - name: Copy generated files to static repository
+      run: |
+        # Create directories if they don't exist
+        mkdir -p static-repo/pages static-repo/data
+        
+        # Copy generated files
+        cp -r pages/* static-repo/pages/ 2>/dev/null || echo "No pages directory found"
+        cp -r data/* static-repo/data/ 2>/dev/null || echo "No data directory found"
+        
+        # Ensure CNAME file exists for custom domain (optional)
+        if [ ! -f static-repo/CNAME ]; then
+          echo "# Add your custom domain here if needed" > static-repo/CNAME
+        fi
+
+    - name: Commit and push to static repository
+      run: |
+        cd static-repo
+        git config --local user.email "action@github.com"
+        git config --local user.name "GitHub Action"
+        git add -A
+        git diff --staged --quiet || git commit -m "Update static content - $(date '+%Y-%m-%d %H:%M:%S')"
+        git push origin main
+      env:
+        GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+
+    - name: Check workflow success
+      if: success()
+      run: |
+        echo "✅ Workflow completed successfully!"
+        echo "📊 Video extraction and static page generation completed"
+        echo "🌐 Static content deployed to yt-boardgame-static repository"
+
+    - name: Notify failure
+      if: failure()
+      run: |
+        echo "❌ Workflow failed!"
+        echo "Please check the logs to identify the issue"
+        exit 1

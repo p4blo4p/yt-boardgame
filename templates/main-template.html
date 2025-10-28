@@ -1,0 +1,355 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>{SITE_TITLE}</title>
+    <meta name="description" content="{SITE_DESCRIPTION}">
+    <link rel="canonical" href="{CANONICAL_URL}">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            line-height: 1.6;
+            color: #333;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 20px;
+        }
+
+        .header {
+            text-align: center;
+            margin-bottom: 40px;
+            background: rgba(255, 255, 255, 0.1);
+            backdrop-filter: blur(10px);
+            padding: 30px;
+            border-radius: 15px;
+            box-shadow: 0 8px 32px rgba(0, 0, 0, 0.1);
+        }
+
+        .header h1 {
+            color: white;
+            font-size: 2.5rem;
+            margin-bottom: 10px;
+            text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.3);
+        }
+
+        .header p {
+            color: #f0f0f0;
+            font-size: 1.1rem;
+            margin-bottom: 20px;
+        }
+
+        .last-update {
+            color: #e0e0e0;
+            font-size: 0.9rem;
+            background: rgba(255, 255, 255, 0.1);
+            padding: 8px 16px;
+            border-radius: 20px;
+            display: inline-block;
+        }
+
+        .stats {
+            display: flex;
+            justify-content: center;
+            gap: 30px;
+            margin: 30px 0;
+        }
+
+        .stat-item {
+            text-align: center;
+            background: rgba(255, 255, 255, 0.15);
+            padding: 15px;
+            border-radius: 10px;
+        }
+
+        .stat-number {
+            font-size: 2rem;
+            font-weight: bold;
+            color: #fff;
+            display: block;
+        }
+
+        .stat-label {
+            font-size: 0.9rem;
+            color: #f0f0f0;
+        }
+
+        .language-section {
+            margin-bottom: 50px;
+        }
+
+        .language-header {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin-bottom: 25px;
+        }
+
+        .language-title {
+            font-size: 2rem;
+            color: white;
+            text-shadow: 1px 1px 2px rgba(0, 0, 0, 0.3);
+            background: rgba(255, 255, 255, 0.2);
+            padding: 10px 30px;
+            border-radius: 25px;
+            backdrop-filter: blur(5px);
+        }
+
+        .channels-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 25px;
+            padding: 0 10px;
+        }
+
+        .channel-card {
+            background: rgba(255, 255, 255, 0.95);
+            border-radius: 15px;
+            padding: 25px;
+            box-shadow: 0 8px 25px rgba(0, 0, 0, 0.15);
+            transition: all 0.3s ease;
+            text-decoration: none;
+            color: inherit;
+            display: block;
+        }
+
+        .channel-card:hover {
+            transform: translateY(-8px);
+            box-shadow: 0 15px 40px rgba(0, 0, 0, 0.2);
+            background: rgba(255, 255, 255, 1);
+        }
+
+        .channel-name {
+            font-size: 1.4rem;
+            font-weight: bold;
+            color: #2c3e50;
+            margin-bottom: 15px;
+            text-align: center;
+        }
+
+        .channel-url {
+            color: #e74c3c;
+            font-size: 0.9rem;
+            text-align: center;
+            word-break: break-all;
+            opacity: 0.8;
+            margin-bottom: 15px;
+        }
+
+        .videos-info {
+            background: #f8f9fa;
+            padding: 10px;
+            border-radius: 8px;
+            text-align: center;
+            color: #495057;
+            font-size: 0.9rem;
+            margin-top: 15px;
+        }
+
+        .videos-list {
+            margin-top: 15px;
+            max-height: 200px;
+            overflow-y: auto;
+        }
+
+        .video-item {
+            background: white;
+            border: 1px solid #e9ecef;
+            border-radius: 8px;
+            padding: 12px;
+            margin-bottom: 8px;
+            transition: all 0.2s ease;
+        }
+
+        .video-item:hover {
+            border-color: #007bff;
+            box-shadow: 0 2px 8px rgba(0, 123, 255, 0.15);
+        }
+
+        .video-title {
+            font-size: 0.95rem;
+            font-weight: 500;
+            color: #2c3e50;
+            margin-bottom: 5px;
+            line-height: 1.4;
+        }
+
+        .video-meta {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            font-size: 0.8rem;
+            color: #6c757d;
+        }
+
+        .video-views {
+            background: #e9ecef;
+            padding: 2px 8px;
+            border-radius: 12px;
+        }
+
+        .footer {
+            text-align: center;
+            margin-top: 50px;
+            padding: 20px;
+            background: rgba(255, 255, 255, 0.1);
+            backdrop-filter: blur(10px);
+            border-radius: 15px;
+            color: white;
+        }
+
+        .footer p {
+            margin-bottom: 10px;
+        }
+
+        .footer a {
+            color: #f0f0f0;
+            text-decoration: none;
+            padding: 5px 10px;
+            background: rgba(255, 255, 255, 0.1);
+            border-radius: 5px;
+            transition: all 0.3s ease;
+        }
+
+        .footer a:hover {
+            background: rgba(255, 255, 255, 0.2);
+        }
+
+        @media (max-width: 768px) {
+            .header h1 {
+                font-size: 2rem;
+            }
+            
+            .channels-grid {
+                grid-template-columns: 1fr;
+            }
+            
+            .stats {
+                flex-direction: column;
+                gap: 15px;
+            }
+        }
+
+        .loading {
+            text-align: center;
+            color: white;
+            font-size: 1.2rem;
+            margin: 50px 0;
+        }
+
+        .error {
+            background: rgba(231, 76, 60, 0.9);
+            color: white;
+            padding: 20px;
+            border-radius: 10px;
+            text-align: center;
+            margin: 20px 0;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <header class="header">
+            <h1>🎲 YT BoardGame</h1>
+            <p>{SITE_DESCRIPTION}</p>
+            <div class="last-update">📅 Última actualización: {LAST_UPDATE}</div>
+        </header>
+
+        <div class="stats">
+            <div class="stat-item">
+                <span class="stat-number">{TOTAL_CHANNELS}</span>
+                <span class="stat-label">Total de Canales</span>
+            </div>
+            <div class="stat-item">
+                <span class="stat-number">{TOTAL_VIDEOS}</span>
+                <span class="stat-label">Videos Recientes</span>
+            </div>
+            <div class="stat-item">
+                <span class="stat-number">{ENGLISH_CHANNELS}</span>
+                <span class="stat-label">Canales en Inglés</span>
+            </div>
+            <div class="stat-item">
+                <span class="stat-number">{SPANISH_CHANNELS}</span>
+                <span class="stat-label">Canales en Español</span>
+            </div>
+        </div>
+
+        <main>
+            <!-- English Channels Section -->
+            {ENGLISH_SECTION}
+            
+            <!-- Spanish Channels Section -->
+            {SPANISH_SECTION}
+        </main>
+
+        <footer class="footer">
+            <p>💡 Proyecto automatizado con GitHub Actions | Extracción diaria de videos</p>
+            <p>🔗 <a href="{GITHUB_SOURCE}" target="_blank">Código Fuente</a> | 
+               <a href="{GITHUB_EXTRACTOR}" target="_blank">Extractor</a> | 
+               <a href="https://youtube.com" target="_blank">YouTube</a></p>
+            <p style="font-size: 0.8rem; opacity: 0.8;">Generado automáticamente por YT BoardGame Extractor</p>
+        </footer>
+    </div>
+
+    <script>
+        // Animaciones y interactividad
+        document.addEventListener('DOMContentLoaded', function() {
+            console.log('🎲 YT BoardGame Static cargado correctamente');
+            
+            // Animación de entrada para las tarjetas
+            const cards = document.querySelectorAll('.channel-card');
+            cards.forEach((card, index) => {
+                card.style.opacity = '0';
+                card.style.transform = 'translateY(20px)';
+                
+                setTimeout(() => {
+                    card.style.transition = 'all 0.5s ease';
+                    card.style.opacity = '1';
+                    card.style.transform = 'translateY(0)';
+                }, index * 100);
+            });
+
+            // Expandir/colapsar videos al hacer clic
+            const videoLists = document.querySelectorAll('.videos-list');
+            videoLists.forEach(list => {
+                const videos = list.querySelectorAll('.video-item');
+                if (videos.length > 3) {
+                    for (let i = 3; i < videos.length; i++) {
+                        videos[i].style.display = 'none';
+                    }
+                    
+                    const toggleBtn = document.createElement('div');
+                    toggleBtn.className = 'video-item';
+                    toggleBtn.style.background = '#007bff';
+                    toggleBtn.style.color = 'white';
+                    toggleBtn.style.cursor = 'pointer';
+                    toggleBtn.style.textAlign = 'center';
+                    toggleBtn.textContent = `📖 Ver todos los ${videos.length} videos`;
+                    
+                    let expanded = false;
+                    toggleBtn.addEventListener('click', () => {
+                        expanded = !expanded;
+                        for (let i = 3; i < videos.length; i++) {
+                            videos[i].style.display = expanded ? 'block' : 'none';
+                        }
+                        toggleBtn.textContent = expanded ? `📖 Ocultar videos` : `📖 Ver todos los ${videos.length} videos`;
+                    });
+                    
+                    list.appendChild(toggleBtn);
+                }
+            });
+        });
+    </script>
+</body>
+</html>
